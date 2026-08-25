@@ -1,2 +1,10 @@
-# otus-cpp-basic
-Репозиторий для разработки проекта и выполнения домашних заданий в рамках курса "C++-разработчик. Базовый уровень".
+# The practice part of the webinar about linkage
+
+## Build
+
+```bash
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
