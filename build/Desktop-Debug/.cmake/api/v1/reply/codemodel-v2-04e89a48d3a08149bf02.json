@@ -1,0 +1,150 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "functions",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "args::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-args-Debug-13611b4848d5fbb2d127.json",
+					"name" : "args",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "fib::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-fib-Debug-62ae1a65cdc264abc4ca.json",
+					"name" : "fib",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "gcd::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-gcd-Debug-da3dd18900419bddef0f.json",
+					"name" : "gcd",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "gcd_cin::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-gcd_cin-Debug-dc4368ca1420a3446d8e.json",
+					"name" : "gcd_cin",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "hanoi::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-hanoi-Debug-0b1d5d1bcc42a052e2d4.json",
+					"name" : "hanoi",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "hello::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-hello-Debug-d80bbf050ceaf97a20ca.json",
+					"name" : "hello",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "minigrep::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-minigrep-Debug-b5142b623896d2c6afec.json",
+					"name" : "minigrep",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "module::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-module-Debug-09ee8a6aca54fba4c40b.json",
+					"name" : "module",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "pow::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-pow-Debug-b4b1f51b704992d2660f.json",
+					"name" : "pow",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "swap::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-swap-Debug-df589f443b49734e6bec.json",
+					"name" : "swap",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "swap_naive::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-swap_naive-Debug-a19d2373e6434599ff60.json",
+					"name" : "swap_naive",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/gk/Education/Otus/cpp-basic/otus-cpp-basic/build/Desktop-Debug",
+		"source" : "/home/gk/Education/Otus/cpp-basic/otus-cpp-basic"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}
