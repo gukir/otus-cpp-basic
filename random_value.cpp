@@ -1,17 +1,12 @@
-#include <iostream>
-
 #include <cstdlib>
 #include <ctime>
 
-int main() {
-
-	const int max_value = 100;
+// Функция возвращает случайное целое число от 0 до max_value
+int random_value(const int max_value) {
 
 	std::srand(std::time(nullptr)); // use current time as seed for random generator
 
-	const int random_value = std::rand() % 100;
+    int random_value = std::rand() % max_value;
 
-	std::cout << random_value << std::endl;
-
-	return 0;
+    return random_value;
 }

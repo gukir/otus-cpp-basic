@@ -1,39 +1,57 @@
 #include <iostream>
 #include <string>
 
-int main(int argc, char** argv) {
-
-	// argc - it is a count of arguments
-	// But there is some detail - OS always pass one system argument - the name of the executable
-	// So, is the application was executed without arguments at all, argc will be still == 1
-
-	// Let's print this argument
-	if (argc > 0) {
-		std::cout << "We have at least one argument!" << std::endl;
-		std::cout << "argv[0] = " << argv[0] << std::endl;
-	}
-
-	// To check - does use print some other argument we should check if the argc >= 2
-	if (argc >= 2) {
-		std::cout << "We have one more argument!" << std::endl;
-		std::cout << "argv[1] = " << argv[1] << std::endl;
-
-		std::string arg1_value{ argv[1] };
-		if (arg1_value == "-parameter") {
-			std::cout << "-parameter argument was detected!" << std::endl;
-
-			// We've detected the '-parameter' argument. And we extect that after this argument there is a value:
-			int parameter_value = 0;
-			if (argc < 3) {
-				std::cout << "Wrong usage! The argument '-parameter' requires some value!" << std::endl;
-				return -1;
-			}
-			// We need to parse the string to the int value
-			parameter_value = std::stoi(argv[2]);
-			std::cout << "The '-parameter' value = " << parameter_value << std::endl;
-		}
-	}
-
-	return 0;
-
+// Функция принимает аргументы командной строки и, в случае отсутствия ошибок, возвращает максимальное значение случайного числа.
+// При наличии флага -table возвращаемое значение устанавливается в 0.
+// В случае наличия недопустимых флагов или значений возвращается -1.
+int argument(int argc, char** argv) {
+    int max_value = 100;
+    if (argc > 1) {
+        std::string arg1_value{ argv[1] };
+        if (arg1_value == "-max") {
+            if (argc < 3) {
+                std::cout << "Wrong usage! The argument '-max' requires some value!" << std::endl;
+                max_value = -1;
+            } else {
+                max_value = std::stoi(argv[2]);
+                if (max_value < 1) {
+                    std::cout << "Wrong max value! The '-max' value must be more than 0!" << std::endl;
+                    max_value = -1;
+                }
+            }
+        } else if (arg1_value == "-table") {
+            if (argc > 2) {
+                std::cout << "Wrong usage! The argument '-table' doesn't require any values!" << std::endl;
+                max_value = -1;
+            } else {
+                max_value = 0;
+            }
+        } else if (arg1_value == "-level") {
+            if (argc < 3) {
+                std::cout << "Wrong usage! The argument '-level' requires some value!" << std::endl;
+                max_value = -1;
+            } else {
+                int level = std::stoi(argv[2]);
+                switch(level){
+                case 1:
+                    max_value = 10;
+                    break;
+                case 2:
+                    max_value = 50;
+                    break;
+                case 3:
+                    max_value = 100;
+                    break;
+                default:
+                    std::cout << "Wrong level! The '-level' must be between 1 and 3!" << std::endl;
+                    max_value = -1;
+                    break;
+                }
+            }
+        } else {
+            std::cout << "Wrong usage! Unknown argument: " << arg1_value << std::endl;
+            max_value = -1;
+        }
+    }
+    return max_value;
 }
