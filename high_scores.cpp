@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <unordered_map>
 
 // Функция дозаписывает в файл результатов строку с именем и значением очков, если передаваемое количество попыток больше 0, и печатает таблицу результатов.
 // При нулевом значении количества попыток функция только печатает таблицу результатов.
@@ -34,6 +35,7 @@ int high_scores(const int attempts_count, const std::string user_name="") {
 
 		std::cout << "High scores table:" << std::endl;
 
+        std::unordered_map<std::string, int> hs_table;
 		std::string username;
 		int high_score = 0;
 		while (true) {
@@ -43,14 +45,20 @@ int high_scores(const int attempts_count, const std::string user_name="") {
 			in_file >> high_score;
 			// Ignore the end of line symbol
 			in_file.ignore();
+            if (hs_table.count(username)) {
+                if(hs_table[username] > high_score) hs_table[username] = high_score;
+            } else {
+                hs_table[username] = high_score;
+            }
+
 
 			if (in_file.fail()) {
 				break;
 			}
-
-			// Print the information to the screen
-			std::cout << username << '\t' << high_score << std::endl;
 		}
+        for (const auto& pair : hs_table) {
+            std::cout << pair.first << "\t" << pair.second << std::endl;
+        }
 	}
 
 	return 0;
