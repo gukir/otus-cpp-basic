@@ -1,11 +1,42 @@
 #include "Ball.hpp"
 #include <cmath>
+#include <fstream>
 
 Ball::Ball() = default;
 
 Ball::Ball(const Point& center, double radius, const Velocity& velocity, const Color& color)
     : cent{center}, rad{radius}, vel{velocity}, col{color} {}
 
+std::istream& operator>>(std::istream& stream, Ball& variable) {
+
+    double x;
+    double y;
+    double vx;
+    double vy;
+    double radius;
+
+    double red;
+    double green;
+    double blue;
+
+    bool isCollidable;
+    stream >> x >> y >> vx >> vy;
+    // Читаем три составляющие цвета шара
+    stream >> red >> green >> blue;
+    // Читаем радиус шара
+    stream >> radius;
+    // Читаем свойство шара isCollidable, которое
+    // указывает, требуется ли обрабатывать пересечение
+    // шаров как столкновение. Если true - требуется.
+    // В базовой части задания этот параметр
+    stream >> std::boolalpha >> isCollidable;
+    variable.setCenter(Point{x, y});
+    variable.setColor(Color{red, green, blue});
+    variable.setVelocity(Velocity{vx, vy});
+    variable.rad = radius;
+    variable.isCollidable = isCollidable;
+    return stream;
+}
 
 /**
  * Задает скорость объекта
@@ -20,6 +51,13 @@ void Ball::setVelocity(const Velocity& velocity) {
  */
 Velocity Ball::getVelocity() const {
     return vel.vector();
+}
+
+/**
+ * @return будет ли отскок
+ */
+bool Ball::is_Collidable() const {
+    return isCollidable;
 }
 
 /**
