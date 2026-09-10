@@ -9,30 +9,28 @@ Ball::Ball(const Point& center, double radius, const Velocity& velocity, const C
 
 std::istream& operator>>(std::istream& stream, Ball& variable) {
 
-    double x;
-    double y;
-    double vx;
-    double vy;
-    double radius;
-
-    double red;
-    double green;
-    double blue;
-
+    Point center{};
+    Point vel_vec{};
+    Velocity velocity{};
+    double radius{};
+    Color color{};
     bool isCollidable;
-    stream >> x >> y >> vx >> vy;
-    // Читаем три составляющие цвета шара
-    stream >> red >> green >> blue;
+    // Читаем координаты центра шара
+    stream >> center;
+    // Читаем координаты вектора скорости и записываем его
+    stream >> vel_vec;
+    velocity.setVector(vel_vec);
+    // Читаем цвет шара
+    stream >> color;
     // Читаем радиус шара
     stream >> radius;
     // Читаем свойство шара isCollidable, которое
     // указывает, требуется ли обрабатывать пересечение
     // шаров как столкновение. Если true - требуется.
-    // В базовой части задания этот параметр
     stream >> std::boolalpha >> isCollidable;
-    variable.setCenter(Point{x, y});
-    variable.setColor(Color{red, green, blue});
-    variable.setVelocity(Velocity{vx, vy});
+    variable.setCenter(center);
+    variable.setColor(color);
+    variable.setVelocity(velocity);
     variable.rad = radius;
     variable.isCollidable = isCollidable;
     return stream;

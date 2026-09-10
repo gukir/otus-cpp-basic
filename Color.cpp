@@ -16,3 +16,11 @@ double Color::green() const {
 double Color::blue() const {
     return b;
 }
+
+std::istream& operator>>(std::istream& stream, Color& variable) {
+    double red, green, blue;
+    // Читаем три составляющие цвета шара
+    stream >> red >> green >> blue;
+    variable = Color(red, green, blue);
+    return stream;
+}
