@@ -112,3 +112,10 @@ double Ball::getMass() const {
 void Ball::setColor(const Color& color) {
     col = color;
 }
+
+/**
+ * @brief Возвращает цвет объекта
+ */
+Color Ball::getColor() const {
+    return col;
+}

@@ -10,6 +10,7 @@ public:
     friend std::istream& operator>>(std::istream& stream, Ball& variable);
     void setVelocity(const Velocity& velocity);
     void setColor(const Color& color);
+    Color getColor() const;
     Velocity getVelocity() const;
     void draw(Painter& painter) const;
     void setCenter(const Point& center);

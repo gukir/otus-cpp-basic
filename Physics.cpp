@@ -1,4 +1,5 @@
 #include "Physics.hpp"
+#include <cmath>
 
 double dot(const Point& lhs, const Point& rhs) {
     return lhs.x * rhs.x + lhs.y * rhs.y;
@@ -11,16 +12,19 @@ void Physics::setWorldBox(const Point& topLeft, const Point& bottomRight) {
     this->bottomRight = bottomRight;
 }
 
-void Physics::update(std::vector<Ball>& balls, const size_t ticks) const {
+void Physics::update(std::vector<Ball>& balls, std::vector<Dust> &fragments, const size_t ticks) const {
 
     for (size_t i = 0; i < ticks; ++i) {
         move(balls);
-        collideWithBox(balls);
-        collideBalls(balls);
+        collideWithBox(balls, fragments);
+        collideBalls(balls, fragments);
+        for (Dust& d : fragments){
+            d.update(timePerTick);
+        }
     }
 }
 
-void Physics::collideBalls(std::vector<Ball>& balls) const {
+void Physics::collideBalls(std::vector<Ball>& balls, std::vector<Dust> &fragments) const {
     for (auto a = balls.begin(); a != balls.end(); ++a) {
         for (auto b = std::next(a); b != balls.end(); ++b) {
             const double distanceBetweenCenters2 =
@@ -30,13 +34,22 @@ void Physics::collideBalls(std::vector<Ball>& balls) const {
                 collisionDistance * collisionDistance;
 
             if (distanceBetweenCenters2 < collisionDistance2 && a->is_Collidable() && b->is_Collidable()) {
+                const Point normal = (b->getCenter() - a->getCenter()) / std::sqrt(distanceBetweenCenters2);
+                const Point contact = a->getCenter() + normal * a->getRadius();
+                const Point rel_vel = a->getVelocity().vector() - b->getVelocity().vector();
+                const double impact_speed = std::sqrt(dot(rel_vel, rel_vel));
+                const Color col{(a->getColor().red() + b->getColor().red()) / 2,
+                                (a->getColor().green() + b->getColor().green()) / 2,
+                                (a->getColor().blue() + b->getColor().blue()) / 2,
+                                };
+                spawnDust(fragments, contact, normal, col, impact_speed);
                 processCollision(*a, *b, distanceBetweenCenters2);
             }
         }
     }
 }
 
-void Physics::collideWithBox(std::vector<Ball>& balls) const {
+void Physics::collideWithBox(std::vector<Ball>& balls, std::vector<Dust> &fragments) const {
     for (Ball& ball : balls) {
         const Point p = ball.getCenter();
         const double r = ball.getRadius();
@@ -49,10 +62,18 @@ void Physics::collideWithBox(std::vector<Ball>& balls) const {
             Point vector = ball.getVelocity().vector();
             vector.x = -vector.x;
             ball.setVelocity(vector);
+            const bool hitLeft = p.x < topLeft.x + r;
+            const Point contact{hitLeft ? topLeft.x : bottomRight.x, p.y};
+            const Point normal{hitLeft ? 1.:-1., 0.};
+            spawnDust(fragments, contact, normal, ball.getColor(), std::abs(ball.getVelocity().vector().x));
         } else if (isOutOfRange(p.y, topLeft.y + r, bottomRight.y - r)) {
             Point vector = ball.getVelocity().vector();
             vector.y = -vector.y;
             ball.setVelocity(vector);
+            const bool hitTop = p.y < topLeft.y + r;
+            const Point contact{p.x, hitTop ? topLeft.y : bottomRight.y};
+            const Point normal{0., hitTop ? 1.:-1.};
+            spawnDust(fragments, contact, normal, ball.getColor(), std::abs(ball.getVelocity().vector().y));
         }
     }
 }

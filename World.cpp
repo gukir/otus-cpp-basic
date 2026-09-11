@@ -1,6 +1,7 @@
 #include "World.hpp"
 #include "Painter.hpp"
 #include <fstream>
+#include <algorithm>
 
 // Длительность одного тика симуляции.
 // Подробнее см. update()
@@ -49,6 +50,10 @@ void World::show(Painter& painter) const {
     for (const Ball& ball : balls) {
         ball.draw(painter);
     }
+    // Вызываем отрисовку каждого осколка
+    for (const Dust& f : fragments) {
+        f.draw(painter);
+    }
 }
 
 /// @brief Обновляет состояние мира
@@ -73,5 +78,9 @@ void World::update(double time) {
     const auto ticks = static_cast<size_t>(std::floor(time / timePerTick));
     restTime = time - double(ticks) * timePerTick;
 
-    physics.update(balls, ticks);
+    physics.update(balls, fragments, ticks);
+    // Убираем умершие осколки
+    fragments.erase(std::remove_if(fragments.begin(), fragments.end(), [](const Dust &d) {
+        return !d.isAlive();
+                    }), fragments.end());
 }
