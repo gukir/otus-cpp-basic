@@ -1,6 +1,8 @@
 #include <iostream>
 #include <limits>
 #include <cmath>
+#include <vector>
+#include <algorithm>
 
 class IStatistics {
 public:
@@ -8,7 +10,7 @@ public:
 
 	virtual void update(double next) = 0;
 	virtual double eval() const = 0;
-	virtual const char * name() const = 0;
+    virtual std::string name() const = 0;
 };
 
 class Min : public IStatistics {
@@ -26,7 +28,7 @@ public:
 		return m_min;
 	}
 
-	const char * name() const override {
+    std::string name() const override {
 		return "min";
 	}
 
@@ -49,7 +51,7 @@ public:
         return m_max;
     }
 
-    const char * name() const override {
+    std::string name() const override {
         return "max";
     }
 
@@ -72,7 +74,7 @@ public:
         return m_mean;
     }
 
-    const char * name() const override {
+    std::string name() const override {
         return "mean";
     }
 
@@ -98,7 +100,7 @@ public:
         return m_std;
     }
 
-    const char * name() const override {
+    std::string name() const override {
         return "std";
     }
 
@@ -109,15 +111,59 @@ private:
     double m_std;
 };
 
+class Pct : public IStatistics {
+public:
+    Pct() : perc{0.}, arr{}, pct{0.} {
+    }
+
+    Pct(double p){
+        if((p < 0.) || (p > 100.)){
+            throw std::invalid_argument("Перцентиль должен находиться в диапазоне от 0 до 100");
+        }
+        perc = p;
+    }
+
+    void update(double next) override {
+        arr.push_back(next);
+        std::sort(arr.begin(), arr.end());
+
+        double index = (perc / 100.) * (arr.size() - 1);
+        size_t lower = static_cast<size_t>(std::floor(index));
+        size_t upper = static_cast<size_t>(std::ceil(index));
+
+        if (lower == upper){
+            pct = lower;
+        } else {
+            double weight = index - lower;
+            pct = arr[lower] * (1. - weight) + arr[upper] * weight;
+        }
+    }
+
+    double eval() const override {
+        return pct;
+    }
+
+    std::string name() const override {
+        return std::string{"pct"} + std::to_string(static_cast<int>(perc));
+    }
+
+private:
+    std::vector<double> arr;
+    double perc;
+    double pct;
+};
+
 int main() {
 
-    const size_t statistics_count = 4;
+    const size_t statistics_count = 6;
 	IStatistics *statistics[statistics_count];
 
 	statistics[0] = new Min{};
     statistics[1] = new Max{};
     statistics[2] = new Mean{};
     statistics[3] = new Std{};
+    statistics[4] = new Pct{90.};
+    statistics[5] = new Pct{95.};
 
 	double val = 0;
 	while (std::cin >> val) {
