@@ -1,5 +1,6 @@
 #include <iostream>
 #include <limits>
+#include <cmath>
 
 class IStatistics {
 public:
@@ -56,12 +57,67 @@ private:
     double m_max;
 };
 
+class Mean : public IStatistics {
+public:
+    Mean() : m_sum{0.}, m_num{0}, m_mean{0.} {
+    }
+
+    void update(double next) override {
+        m_sum += next;
+        m_num++;
+        m_mean = m_sum / m_num;
+    }
+
+    double eval() const override {
+        return m_mean;
+    }
+
+    const char * name() const override {
+        return "mean";
+    }
+
+private:
+    double m_sum;
+    long m_num;
+    double m_mean;
+};
+
+class Std : public IStatistics {
+public:
+    Std() : m_sum{0.}, m_ssum{0.}, m_num{0}, m_std{0.} {
+    }
+
+    void update(double next) override {
+        m_sum += next;
+        m_ssum += next*next;
+        m_num++;
+        m_std = std::sqrt((m_ssum - m_sum * m_sum / m_num) / (m_num - 1));
+    }
+
+    double eval() const override {
+        return m_std;
+    }
+
+    const char * name() const override {
+        return "std";
+    }
+
+private:
+    double m_sum;
+    double m_ssum;
+    long m_num;
+    double m_std;
+};
+
 int main() {
 
-	const size_t statistics_count = 1;
+    const size_t statistics_count = 4;
 	IStatistics *statistics[statistics_count];
 
 	statistics[0] = new Min{};
+    statistics[1] = new Max{};
+    statistics[2] = new Mean{};
+    statistics[3] = new Std{};
 
 	double val = 0;
 	while (std::cin >> val) {
