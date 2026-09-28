@@ -113,7 +113,7 @@ private:
 
 class Pct : public IStatistics {
 public:
-    Pct() : perc{0.}, arr{}, pct{0.} {
+    Pct() : perc{0.}, arr{} {
     }
 
     Pct(double p){
@@ -124,22 +124,22 @@ public:
     }
 
     void update(double next) override {
-        arr.push_back(next);
-        std::sort(arr.begin(), arr.end());
+        arr.push_back(next);  
+    }
 
+    double eval() const override {
         double index = (perc / 100.) * (arr.size() - 1);
         size_t lower = static_cast<size_t>(std::floor(index));
         size_t upper = static_cast<size_t>(std::ceil(index));
 
-        if (lower == upper){
-            pct = arr[lower];
-        } else {
+        std::vector<double> copy_arr = arr;
+        std::nth_element(copy_arr.begin(), copy_arr.begin() + lower, copy_arr.end());
+        double pct = copy_arr[lower];
+        if (lower != upper){
             double weight = index - lower;
-            pct = arr[lower] * (1. - weight) + arr[upper] * weight;
+            std::nth_element(copy_arr.begin(), copy_arr.begin() + upper, copy_arr.end());
+            pct = pct * (1. - weight) + copy_arr[upper] * weight;
         }
-    }
-
-    double eval() const override {
         return pct;
     }
 
@@ -150,7 +150,6 @@ public:
 private:
     std::vector<double> arr;
     double perc;
-    double pct;
 };
 
 int main() {
