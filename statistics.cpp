@@ -3,6 +3,7 @@
 #include <cmath>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 class IStatistics {
 public:
@@ -155,21 +156,19 @@ private:
 };
 
 int main() {
+    std::vector<std::unique_ptr<IStatistics>> statistics;
 
-    const size_t statistics_count = 6;
-	IStatistics *statistics[statistics_count];
-
-	statistics[0] = new Min{};
-    statistics[1] = new Max{};
-    statistics[2] = new Mean{};
-    statistics[3] = new Std{};
-    statistics[4] = new Pct{90.};
-    statistics[5] = new Pct{95.};
+    statistics.push_back(std::make_unique<Min>());
+    statistics.push_back(std::make_unique<Max>());
+    statistics.push_back(std::make_unique<Mean>());
+    statistics.push_back(std::make_unique<Std>());
+    statistics.push_back(std::make_unique<Pct>(90.));
+    statistics.push_back(std::make_unique<Pct>(95.));
 
 	double val = 0;
 	while (std::cin >> val) {
-		for (size_t i = 0; i < statistics_count; ++i) {
-			statistics[i]->update(val);
+        for (auto& stat : statistics) {
+            stat->update(val);
 		}
 	}
 
@@ -180,13 +179,8 @@ int main() {
 	}
 
 	// Print results if any
-	for (size_t i = 0; i < statistics_count; ++i) {
-		std::cout << statistics[i]->name() << " = " << statistics[i]->eval() << std::endl;
-	}
-
-	// Clear memory - delete all objects created by new
-	for (size_t i = 0; i < statistics_count; ++i) {
-		delete statistics[i];
+    for (const auto& stat : statistics) {
+        std::cout << stat->name() << " = " << stat->eval() << std::endl;
 	}
 
 	return 0;
