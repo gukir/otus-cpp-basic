@@ -93,7 +93,9 @@ public:
         m_sum += next;
         m_ssum += next*next;
         m_num++;
-        m_std = std::sqrt((m_ssum - m_sum * m_sum / m_num) / (m_num - 1));
+        if(m_num > 1){
+            m_std = std::sqrt((m_ssum - m_sum * m_sum / m_num) / (m_num - 1));
+        }
     }
 
     double eval() const override {
