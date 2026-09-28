@@ -132,7 +132,7 @@ public:
         size_t upper = static_cast<size_t>(std::ceil(index));
 
         if (lower == upper){
-            pct = lower;
+            pct = arr[lower];
         } else {
             double weight = index - lower;
             pct = arr[lower] * (1. - weight) + arr[upper] * weight;
