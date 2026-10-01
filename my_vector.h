@@ -15,7 +15,11 @@ public:
     // Добавление элемента в конец контейнера
     void push_back(const T &value);
 
+    // Удаление элемента по индексу
+    void erase(std::size_t ind);
 
+    // Удаление элемента по индексам
+    void erase(const std::size_t* indices, std::size_t count);
 
     // Геттер размера контейнера
     std::size_t size() const;

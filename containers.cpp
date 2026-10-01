@@ -16,10 +16,11 @@ int main() {
 	// (ожидаемый результат: 10)
     std::cout << container.size() << std::endl;
 	// удаление третьего (по счёту), пятого и седьмого элементов
-
+    std::size_t for_del[] = {2, 4, 6};
+    container.erase(for_del, static_cast<std::size_t>(sizeof(for_del) / sizeof(for_del[0])));
 	// вывод содержимого контейнера на экран
 	// (ожидаемый результат: 0, 1, 3, 5, 7, 8, 9)
-
+    std::cout << container << std::endl;
 	// добавление элемента 10 в начало контейнера
 
 	// вывод содержимого контейнера на экран

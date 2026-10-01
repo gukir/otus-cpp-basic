@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <iostream>
+#include <algorithm>
 
 template <typename T>
 MyVector<T>::MyVector()
@@ -23,6 +24,31 @@ template <typename T>
 void MyVector<T>::push_back(const T &value) {
     if (size_ == capacity_) reallocate();
     new (data_ + size_++) T(value);
+}
+
+template <typename T>
+void MyVector<T>::erase(std::size_t ind) {
+    // Для удаления одного элемента из контейнера
+    for (std::size_t i = ind; i + 1 < size_; ++i)
+        // Сдвигаем все элементы правее его на одну позицию влево
+        data_[i] = std::move(data_[i + 1]);
+    // Удаляем последний элемент и декрементируем значение размера контейнера
+    data_[--size_].~T();
+}
+
+template <typename T>
+void MyVector<T>::erase(const std::size_t* indices, std::size_t count) {
+    // Выходим, если ничего удалять не нужно
+    if (count == 0) return;
+
+    // Выделяем память и копируем массив индексов, сортируем
+    std::unique_ptr<std::size_t[]> sorted_indices(new std::size_t[count]);
+    std::copy(indices, indices + count, sorted_indices.get());
+    std::sort(sorted_indices.get(), sorted_indices.get() + count);
+
+    // Удаляем по одному, начиная с последнего индекса в отсортированном массиве
+    for (std::size_t i = count; i-- > 0; )
+        erase(sorted_indices[i]);
 }
 
 template <typename T>
