@@ -2,6 +2,7 @@
 #include <memory>
 #include <iostream>
 #include <algorithm>
+#include <stdexcept>
 
 template <typename T>
 MyVector<T>::MyVector()
@@ -21,13 +22,40 @@ MyVector<T>::~MyVector(){
 }
 
 template <typename T>
-void MyVector<T>::push_back(const T &value) {
+void MyVector<T>::insert(std::size_t index, const T& value) {
+    if (index > size_)
+        throw std::out_of_range("MyVector: индекс вставки находится за пределами контейнера.");
+    // Раздуваем вместимость, если достигли предела
     if (size_ == capacity_) reallocate();
-    new (data_ + size_++) T(value);
+    // Если индекс вставки равен размеру контейнера, то вставляем в конец
+    if (index == size_) {
+        new (data_ + size_) T(value);
+    } else {
+        // Иначе сдвигаем правую от индекса чать в право на один элемент
+        new (data_ + size_) T(std::move(data_[size_ - 1]));
+        for (std::size_t i = size_ - 1; i > index; i--)
+            data_[i] = std::move(data_[i-1]);
+        // И вписываем в образовавшуюся дырку значение
+        data_[index] = value;
+    }
+    // Увеличиваем значение размера контейнера
+    size_++;
+}
+
+template <typename T>
+void MyVector<T>::push_front(const T &value) {
+    insert(0, value);
+}
+
+template <typename T>
+void MyVector<T>::push_back(const T &value) {
+    insert(size_, value);
 }
 
 template <typename T>
 void MyVector<T>::erase(std::size_t ind) {
+    if (ind >= size_)
+        throw std::out_of_range("MyVector: индекс удаляемого элемента находится за пределами контейнера.");
     // Для удаления одного элемента из контейнера
     for (std::size_t i = ind; i + 1 < size_; ++i)
         // Сдвигаем все элементы правее его на одну позицию влево

@@ -12,6 +12,10 @@ public:
     // Деструктор
     ~MyVector();
 
+    // Добавление элемента по индексу
+    void insert(std::size_t index, const T& value);
+    // Добавление элемента в начало контейнера
+    void push_front(const T &value);
     // Добавление элемента в конец контейнера
     void push_back(const T &value);
 
