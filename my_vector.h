@@ -12,6 +12,15 @@ public:
     // Деструктор
     ~MyVector();
 
+    // Конструктор копирования
+    MyVector(const MyVector& copy);
+    // Конструктор перемещения
+    MyVector(MyVector&& moved);
+    // Оператор присваивания через копию
+    MyVector& operator=(const MyVector& copy);
+    // Оператор присваивания с перемещением
+    MyVector& operator=(MyVector&& moved);
+
     // Добавление элемента по индексу
     void insert(std::size_t index, const T& value);
     // Добавление элемента в начало контейнера

@@ -3,6 +3,8 @@
 #include <iostream>
 #include <algorithm>
 #include <stdexcept>
+#include <utility>
+
 
 template <typename T>
 MyVector<T>::MyVector()
@@ -17,8 +19,62 @@ MyVector<T>::~MyVector(){
     for (std::size_t i = 0; i < size_; i++){
         data_[i].~T();
     }
-        // Освобождаем ранее выделенную память
+    // Освобождаем ранее выделенную память
     ::operator delete(data_);
+}
+
+template <typename T>
+MyVector<T>::MyVector(const MyVector& copy)
+    : size_(copy.size_)
+    , capacity_(copy.capacity_)
+{
+    // Выделяем новую область памяти и копируем значения из старой
+    if(capacity_ > 0){
+        data_ = static_cast<T*>(:: operator new(capacity_ * sizeof(T)));
+        for(std::size_t i = 0; i < size_; i++)
+            new (data_ + i) T(copy.data_[i]);
+    }
+}
+
+template <typename T>
+MyVector<T>::MyVector(MyVector&& moved)
+    : size_(moved.size_)
+    , capacity_(moved.capacity_)
+    , data_(moved.data_)
+{
+    moved.size_ = 0;
+    moved.capacity_ = 0;
+    moved.data_ = nullptr;
+}
+
+template <typename T>
+MyVector<T>& MyVector<T>::operator=(const MyVector& copy){
+    if (this != &copy){//защита от копирования в себя же
+        // Используем конструктор копирования во избежание дублирования кода
+        MyVector tmp(copy);
+        // Меняем местами данные с this
+        std::swap(*this, tmp);
+    }
+    return *this;
+}
+
+template <typename T>
+MyVector<T>& MyVector<T>::operator=(MyVector&& moved){
+    if (this != &moved){//защита от перемещения в себя же
+        // Сначала удаляем ранние данные
+        for (std::size_t i = 0; i < size_; i++)
+            data_[i].~T();
+        ::operator delete(data_);
+        // Забираем из moved
+        data_ = moved.data_;
+        size_ = moved.size_;
+        capacity_ = moved.capacity_;
+        // Обнуляем moved
+        moved.data_ = nullptr;
+        moved.size_ = 0;
+        moved.capacity = 0;
+    }
+    return *this;
 }
 
 template <typename T>
