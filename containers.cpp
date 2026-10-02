@@ -36,5 +36,8 @@ int main() {
 	// вывод содержимого контейнера на экран
 	// (ожидаемый результат: 10, 0, 1, 3, 20, 5, 7, 8, 9, 30)
     std::cout << container << std::endl;
+    /*for (auto iter = container.begin(); iter != container.end(); ++iter){
+        std::cout << *iter << std::endl;
+    }*/
 	return 0;
 }

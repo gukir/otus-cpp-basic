@@ -99,16 +99,6 @@ void MyVector<T>::insert(std::size_t index, const T& value) {
 }
 
 template <typename T>
-void MyVector<T>::push_front(const T &value) {
-    insert(0, value);
-}
-
-template <typename T>
-void MyVector<T>::push_back(const T &value) {
-    insert(size_, value);
-}
-
-template <typename T>
 void MyVector<T>::erase(std::size_t ind) {
     if (ind >= size_)
         throw std::out_of_range("MyVector: индекс удаляемого элемента находится за пределами контейнера.");
@@ -154,16 +144,6 @@ void MyVector<T>::reallocate(){
     data_ = new_data;
     // Присваиваем новое значение вместимости
     capacity_ = new_capacity;
-}
-
-template <typename T>
-std::size_t MyVector<T>::size() const{
-    return size_;
-}
-
-template <typename T>
-const T& MyVector<T>::operator[](std::size_t ind) const{
-    return data_[ind];
 }
 
 template <typename T>
