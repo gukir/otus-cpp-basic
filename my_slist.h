@@ -3,7 +3,11 @@
 
 template <typename T>
 class MySList : public MyContainer<T> {
-    struct Node { T value; Node* next; };
+    struct Node {
+        T value;
+        Node* next;
+        Node(T val) : value(val), next(nullptr) {}
+    };
 
 public:
     // Конструктор
@@ -14,13 +18,14 @@ public:
     {}
 
     void clear(){
-        Node* current = head_;
         // Начиная с головы освобождаем память каждого узла
         while (head_) {
-            current = head_->next;
+            Node* current = head_->next;
             delete head_;
             head_ = current;
         }
+        tail_ = nullptr;
+        size_ = 0;
     }
     // Деструктор
     ~MySList() override {
@@ -44,14 +49,15 @@ public:
         moved.tail_ = nullptr;
     }
     // Оператор присваивания через копию
-    MySList& operator=(const MySList& copy){
-        if (this != &copy){//защита от копирования в себя же
-            // Используем конструктор копирования во избежание дублирования кода
-            MySList tmp(copy);
-            // Меняем местами данные с this
-            std::swap(*this, tmp);
-        }
+    MySList& operator=(MySList copy){
+        this->swap(copy);
         return *this;
+    }
+    // Вспомогательная функция для copy-and-swap
+    void swap(MySList& other) {
+        std::swap(head_, other.head_);
+        std::swap(tail_, other.tail_);
+        std::swap(size_, other.size_);
     }
     // Оператор присваивания с перемещением
     MySList& operator=(MySList&& moved){
@@ -73,7 +79,7 @@ public:
     // Добавление элемента в конец контейнера
     void push_back(const T& value) override {
         // Создадим новый узел
-        Node* node = new Node{value, nullptr};
+        Node* node = new Node{value};
         // Если список не пустой (есть хвост)
         if (tail_) tail_->next = node; //То указываем на новый узел
         else head_ = node; // Иначе головой указываем на единственный узел
@@ -88,7 +94,7 @@ public:
         if (index == size_) { push_back(value); return; }
         // Для минимизации проверок вставку будим проводить с помощью указателя на указатель
         // Создадим новый узел
-        Node* node = new Node{value, nullptr};
+        Node* node = new Node{value};
         // Инициализируем указатель на указатель
         Node** curr_ref = &head_;
         // Сдвигаем его на index

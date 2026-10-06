@@ -49,14 +49,15 @@ public:
         moved.data_ = nullptr;
     }
     // Оператор присваивания через копию
-    MyVector& operator=(const MyVector& copy){
-        if (this != &copy){//защита от копирования в себя же
-            // Используем конструктор копирования во избежание дублирования кода
-            MyVector tmp(copy);
-            // Меняем местами данные с this
-            std::swap(*this, tmp);
-        }
+    MyVector& operator=(MyVector copy){
+        this->swap(copy);
         return *this;
+    }
+    // Вспомогательная функция для copy-and-swap
+    void swap(MyVector& other) {
+        std::swap(size_, other.size_);
+        std::swap(capacity_, other.capacity_);
+        std::swap(data_, other.data_);
     }
     // Оператор присваивания с перемещением
     MyVector& operator=(MyVector&& moved){
