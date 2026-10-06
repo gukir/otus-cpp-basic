@@ -1,8 +1,9 @@
 #include <iostream>
 #include "my_vector.h"
+#include "my_slist.h"
 
 int main() {
-    using Container = MyVector<int>;
+    using Container = MySList<int>;
 	// создание объекта контейнера для хранения объектов типа int
     Container container;
 	// добавление в контейнер десяти элементов (0, 1 … 9)
