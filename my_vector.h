@@ -1,8 +1,6 @@
 #pragma once
 #include "my_container.h"
-#include <memory>
 #include <iostream>
-#include <algorithm>
 #include <stdexcept>
 #include <utility>
 
@@ -115,21 +113,6 @@ public:
         data_[--size_].~T();
     }
 
-    // Удаление элемента по индексам
-    void erase(const std::size_t* indices, std::size_t count) {
-        // Выходим, если ничего удалять не нужно
-        if (count == 0) return;
-
-        // Выделяем память и копируем массив индексов, сортируем
-        std::unique_ptr<std::size_t[]> sorted_indices(new std::size_t[count]);
-        std::copy(indices, indices + count, sorted_indices.get());
-        std::sort(sorted_indices.get(), sorted_indices.get() + count);
-
-        // Удаляем по одному, начиная с последнего индекса в отсортированном массиве
-        for (std::size_t i = count; i-- > 0; )
-            erase(sorted_indices[i]);
-    }
-
     // Геттер размера контейнера
     std::size_t size() const {return size_;}
 
@@ -153,11 +136,11 @@ public:
             return tmp;
         }
         // Операторы сравнения
-        friend bool operator== (const Iterator& a, const Iterator& b) {
-            return a.m_ptr == b.m_ptr;
+        bool operator== (const Iterator& other) {
+            return m_ptr == other.m_ptr;
         }
-        friend bool operator!= (const Iterator& a, const Iterator& b) {
-            return a.m_ptr != b.m_ptr;
+        bool operator!= (const Iterator& other) {
+            return m_ptr != other.m_ptr;
         }
     private:
         T* m_ptr;
@@ -166,6 +149,18 @@ public:
     const Iterator begin() const  {return Iterator(data_);}
     Iterator end()                {return Iterator(data_ + size_);}
     const Iterator end() const    {return Iterator(data_ + size_);}
+
+    // Вывод в поток
+    void print(std::ostream& os) const override {
+        os << '(';
+        for (std::size_t i = 0; i < this->size(); i++){
+            if (i > 0) os << ", ";
+            os << data_[i];
+        }
+        os << ')';
+    }
+
+    std::string name() const override {return "MyVector";}
 
 private:
     std::size_t size_; // размер контейнера
@@ -193,15 +188,3 @@ private:
         capacity_ = new_capacity;
     }
 };
-
-// Перегрузка оператора вывода в поток
-template <typename T>
-std::ostream& operator<<(std::ostream& os, const MyVector<T>& vec){
-    os << '(';
-    for (std::size_t i = 0; i < vec.size(); i++){
-        if (i > 0) os << ", ";
-        os << vec[i];
-    }
-    os << ')';
-    return os;
-}
