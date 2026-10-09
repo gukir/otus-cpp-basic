@@ -77,7 +77,7 @@ public:
     }
 
     // Добавление элемента по индексу
-    void insert(std::size_t index, const T& value) {
+    void insert(std::size_t index, const T& value) override {
         if (index > size_ || index < 0)
             throw std::out_of_range("MyVector: индекс вставки находится за пределами контейнера.");
         // Раздуваем вместимость, если достигли предела
@@ -97,7 +97,7 @@ public:
         size_++;
     }
     // Добавление элемента в начало контейнера
-    void push_front(const T &value) {insert(0, value);}
+    void push_front(const T &value) override {insert(0, value);}
     // Добавление элемента в конец контейнера
     void push_back(const T &value) override {insert(size_, value);}
 
@@ -114,11 +114,11 @@ public:
     }
 
     // Геттер размера контейнера
-    std::size_t size() const {return size_;}
+    std::size_t size() const override {return size_;}
 
     // Возврат элемента контейнера
-    T& operator[](std::size_t ind) {return data_[ind];}
-    const T& operator[](std::size_t ind) const {return data_[ind];}
+    T& operator[](std::size_t ind) override {return data_[ind];}
+    const T& operator[](std::size_t ind) const override {return data_[ind];}
 
     // Итераторы
     class Iterator {

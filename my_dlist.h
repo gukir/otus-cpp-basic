@@ -132,7 +132,7 @@ public:
     void push_back(const T& value) override {insert(size_, value);}
 
     // Добавление элемента в начало контейнера
-    void push_front(const T &value) {insert(0, value);}
+    void push_front(const T &value) override {insert(0, value);}
 
     // Удаление элемента по индексу
     void erase(std::size_t index) override {
