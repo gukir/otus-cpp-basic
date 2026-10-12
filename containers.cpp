@@ -5,9 +5,13 @@
 
 int main() {
 
-    MyContainer<int>* containers[] = {new MyVector<int>, new MySList<int>, new MyDList<int>};
+    std::unique_ptr<MyContainer<int>> containers[] = {
+        std::make_unique<MyVector<int>>(),
+        std::make_unique<MySList<int>>(),
+        std::make_unique<MyDList<int>>()
+    };
 
-    for (auto* container : containers){
+    for (const auto& container : containers){
         std::cout << "Демонстрация работы класса: " << container->name() << std::endl;
         // добавление в контейнер десяти элементов (0, 1 … 9)
         for(int i = 0; i < 10; i++){

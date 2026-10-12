@@ -79,7 +79,7 @@ public:
 
     // Вспомогательная функция для поиска элемента по индексу за O(N/2)
     Node* getNode(std::size_t index) const {
-        if (index >= size_ || index < 0) return nullptr;
+        if (index >= size_) return nullptr;
 
         Node* curr_node;
         // К какому концу индекс ближе, с того и начинаем движение
@@ -95,9 +95,42 @@ public:
 
     // Добавление элемента по индексу
     void insert(std::size_t index, const T& value) override {
-        if (index > size_ || index < 0) throw std::out_of_range("DList::insert");
+        if (index > size_) throw std::out_of_range("DList::insert");
         // Создадим новый узел
         Node* new_node = new Node{value};
+        // При пустом списке
+        if (head_ == nullptr) {
+            head_ = tail_ = new_node;
+        }
+        // Если вставляем в начало
+        else if (index == 0) {
+            new_node->next = head_;
+            head_->prev = new_node;
+            head_ = new_node;
+        }
+        // Если вставляем в конец
+        else if (index == size_) {
+            tail_->next = new_node;
+            new_node->prev = tail_;
+            tail_ = new_node;
+        }
+        // Для других случаев
+        else {
+            Node* current = getNode(index);
+            Node* previous = current->prev;
+
+            new_node->next = current;
+            new_node->prev = previous;
+
+            previous->next = new_node;
+            current->prev = new_node;
+        }
+        ++size_;
+    }
+    void insert(std::size_t index, T&& value) override {
+        if (index > size_) throw std::out_of_range("DList::insert");
+        // Создадим новый узел
+        Node* new_node = new Node{std::move(value)};
         // При пустом списке
         if (head_ == nullptr) {
             head_ = tail_ = new_node;
@@ -130,13 +163,15 @@ public:
 
     // Добавление элемента в конец контейнера
     void push_back(const T& value) override {insert(size_, value);}
+    void push_back(T&& value) override {insert(size_, std::move(value));}
 
     // Добавление элемента в начало контейнера
-    void push_front(const T &value) {insert(0, value);}
+    void push_front(const T &value) override {insert(0, value);}
+    void push_front(T &&value) override {insert(0, std::move(value));}
 
     // Удаление элемента по индексу
     void erase(std::size_t index) override {
-        if (index >= size_ || index < 0) throw std::out_of_range("DList::erase");
+        if (index >= size_) throw std::out_of_range("DList::erase");
         // Найдём узел для удаления
         Node* target = getNode(index);
         // Если удаляем единственный элемент
@@ -215,7 +250,7 @@ public:
         os << ')';
     }
 
-    std::string name() const override {return "MyDList";}
+    const char* name() const override {return "MyDList";}
 
 private:
     Node* head_ = nullptr;
