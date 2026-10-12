@@ -1,25 +1,25 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.3)
 
-project(14.STL)
+project(Lecture15StdGeneral)
 
-add_executable(string                     string.cpp)
-add_executable(string_file_extension      string_file_extension.cpp)
-add_executable(file_io                    file_io.cpp)
-add_executable(string_modify              string_modify.cpp)
-add_executable(filesystem                 filesystem.cpp)
-add_executable(thread                     thread.cpp)
-add_executable(limits                     limits.cpp)
-add_executable(regex                      regex.cpp)
+add_executable(lec_15_01_string_file_ext lec_15_01_string_file_ext.cpp)
+add_executable(lec_15_02_string_api      lec_15_02_string_api.cpp)
+add_executable(lec_15_03_string_modify   lec_15_03_string_modify.cpp)
+add_executable(lec_15_04_numeric_limits  lec_15_04_numeric_limits.cpp)
+add_executable(lec_15_05_filesystem      lec_15_05_filesystem.cpp)
+add_executable(lec_15_06_chrono          lec_15_06_chrono.cpp)
+add_executable(lec_15_07_streams         lec_15_07_streams.cpp)
+add_executable(regex                     regex.cpp)
 
 
 set_target_properties(
-    string 
-    string_file_extension
-    file_io
-    string_modify
-    filesystem
-    thread
-    limits
+    lec_15_01_string_file_ext 
+    lec_15_02_string_api
+    lec_15_03_string_modify
+    lec_15_04_numeric_limits
+    lec_15_05_filesystem
+    lec_15_06_chrono
+    lec_15_07_streams
     regex
 PROPERTIES
     CXX_STANDARD 17
