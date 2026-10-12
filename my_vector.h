@@ -78,7 +78,7 @@ public:
 
     // Добавление элемента по индексу
     void insert(std::size_t index, const T& value) override {
-        if (index > size_ || index < 0)
+        if (index > size_)
             throw std::out_of_range("MyVector: индекс вставки находится за пределами контейнера.");
         // Раздуваем вместимость, если достигли предела
         if (size_ == capacity_) reallocate();
@@ -96,14 +96,35 @@ public:
         // Увеличиваем значение размера контейнера
         size_++;
     }
+    void insert(std::size_t index, T&& value) override {
+        if (index > size_)
+            throw std::out_of_range("MyVector: индекс вставки находится за пределами контейнера.");
+        // Раздуваем вместимость, если достигли предела
+        if (size_ == capacity_) reallocate();
+        // Если индекс вставки равен размеру контейнера, то вставляем в конец
+        if (index == size_) {
+            new (data_ + size_) T(std::move(value));
+        } else {
+            // Иначе сдвигаем правую от индекса чать в право на один элемент
+            new (data_ + size_) T(std::move(data_[size_ - 1]));
+            for (std::size_t i = size_ - 1; i > index; i--)
+                data_[i] = std::move(data_[i-1]);
+            // И вписываем в образовавшуюся дырку значение
+            data_[index] = std::move(value);
+        }
+        // Увеличиваем значение размера контейнера
+        size_++;
+    }
     // Добавление элемента в начало контейнера
     void push_front(const T &value) override {insert(0, value);}
+    void push_front(T &&value) override {insert(0, std::move(value));}
     // Добавление элемента в конец контейнера
     void push_back(const T &value) override {insert(size_, value);}
+    void push_back(T &&value) override {insert(size_, std::move(value));}
 
     // Удаление элемента по индексу
     void erase(std::size_t ind) override {
-        if (ind >= size_ || ind < 0)
+        if (ind >= size_)
             throw std::out_of_range("MyVector: индекс удаляемого элемента находится за пределами контейнера.");
         // Для удаления одного элемента из контейнера
         for (std::size_t i = ind; i + 1 < size_; ++i)
@@ -160,7 +181,7 @@ public:
         os << ')';
     }
 
-    std::string name() const override {return "MyVector";}
+    const char* name() const override {return "MyVector";}
 
 private:
     std::size_t size_; // размер контейнера

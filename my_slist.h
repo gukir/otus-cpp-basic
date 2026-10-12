@@ -87,10 +87,20 @@ public:
         tail_ = node;
         ++size_;
     }
-
+    void push_back(T&& value) override {
+        // Создадим новый узел
+        Node* node = new Node{std::move(value)};
+        // Если список не пустой (есть хвост)
+        if (tail_) tail_->next = node; //То указываем на новый узел
+        else head_ = node; // Иначе головой указываем на единственный узел
+        // Перезаписываем указатель на хвост
+        tail_ = node;
+        ++size_;
+    }
+  
     // Добавление элемента по индексу
     void insert(std::size_t index, const T& value) override {
-        if (index > size_ || index < 0) throw std::out_of_range("SList::insert");
+        if (index > size_) throw std::out_of_range("SList::insert");
         if (index == size_) { push_back(value); return; }
         // Для минимизации проверок вставку будим проводить с помощью указателя на указатель
         // Создадим новый узел
@@ -105,13 +115,30 @@ public:
         *curr_ref = node;
         ++size_;
     }
-
+    void insert(std::size_t index, T&& value) override {
+        if (index > size_) throw std::out_of_range("SList::insert");
+        if (index == size_) { push_back(std::move(value)); return; }
+        // Для минимизации проверок вставку будим проводить с помощью указателя на указатель
+        // Создадим новый узел
+        Node* node = new Node{std::move(value)};
+        // Инициализируем указатель на указатель
+        Node** curr_ref = &head_;
+        // Сдвигаем его на index
+        for (std::size_t i = 0; i < index; ++i)
+            curr_ref = &((*curr_ref)->next);
+        // Врезка элемента
+        node->next = *curr_ref;
+        *curr_ref = node;
+        ++size_;
+    }
+  
     // Добавление элемента в начало контейнера
     void push_front(const T &value) override {insert(0, value);}
+    void push_front(T &&value) override {insert(0, std::move(value));}
 
     // Удаление элемента по индексу
     void erase(std::size_t index) override {
-        if (index >= size_ || index < 0) throw std::out_of_range("SList::erase");
+        if (index >= size_) throw std::out_of_range("SList::erase");
         // Удаление также будем производить с помощью указателя на указатель
         // Инициализируем указатель на указатель
         Node** curr_ref = &head_;
@@ -185,7 +212,7 @@ public:
         os << ')';
     }
 
-    std::string name() const override {return "MySList";}
+    const char* name() const override {return "MySList";}
 
 private:
     Node* head_ = nullptr;

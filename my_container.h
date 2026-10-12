@@ -12,10 +12,13 @@ public:
 
     // Добавление элемента по индексу
     virtual void insert(std::size_t index, const T& value) = 0;
+    virtual void insert(std::size_t index, T&& value) = 0;
     // Добавление элемента в конец контейнера
     virtual void push_back(const T &value) = 0;
+    virtual void push_back(T &&value) = 0;
     // Добавление элемента в начало контейнера
     virtual void push_front(const T &value) = 0;
+    virtual void push_front(T &&value) = 0;
     // Удаление элемента по индексу
     virtual void erase(std::size_t ind) = 0;
     // Удаление элемента по индексам
@@ -46,5 +49,5 @@ public:
         return os;
     }
     // Строка имени класса
-    virtual std::string name() const = 0;
+    virtual const char* name() const = 0;
 };
