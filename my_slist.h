@@ -12,9 +12,9 @@ class MySList : public MyContainer<T> {
 public:
     // Конструктор
     MySList()
-        : size_{0}
-        , head_{nullptr}
+        : head_{nullptr}
         , tail_{nullptr}
+        , size_{0}
     {}
 
     void clear(){
