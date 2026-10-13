@@ -7,15 +7,15 @@ class MyDList : public MyContainer<T> {
         Node* prev;
         T value;
         Node* next;
-        Node(T val) : value(val), prev(nullptr), next(nullptr) {}
+        Node(T val) : prev(nullptr), value(val), next(nullptr) {}
     };
 
 public:
     // Конструктор
     MyDList()
-        : size_{0}
-        , head_{nullptr}
+        : head_{nullptr}
         , tail_{nullptr}
+        , size_{0}
     {}
 
     void clear(){
