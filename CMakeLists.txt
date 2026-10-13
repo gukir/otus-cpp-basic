@@ -36,7 +36,10 @@ enable_testing()
 
 # 4. Создаем исполняемый файл для ваших тестов
 add_executable(unit_tests
-  test.cpp  # Путь к вашему файлу с тестами
+  tests/test_vector.cpp
+  tests/fixture_vector.hpp
+  tests/test_list.cpp
+  tests/fixture_list.hpp
 )
 
 # 5. Подключаем библиотеки GTest и GTest main
