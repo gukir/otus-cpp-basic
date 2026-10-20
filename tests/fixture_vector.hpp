@@ -6,7 +6,7 @@ protected:
     // SetUp вызывается перед каждым тестом (TEST_F)
     void SetUp() override {
         // Наполняем вектор значениями
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 5; i++){
           v1.push_back(i);
         }
     }
