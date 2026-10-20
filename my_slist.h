@@ -49,8 +49,11 @@ public:
         moved.tail_ = nullptr;
     }
     // Оператор присваивания через копию
-    MySList& operator=(MySList copy){
-        this->swap(copy);
+    MySList& operator=(const MySList& copy){
+        if (this != &copy) {
+            MySList tmp(copy);
+            this->swap(tmp);
+        }
         return *this;
     }
     // Вспомогательная функция для copy-and-swap

@@ -50,8 +50,11 @@ public:
         moved.tail_ = nullptr;
     }
     // Оператор присваивания через копию
-    MyDList& operator=(MyDList copy){
-        this->swap(copy);
+    MyDList& operator=(const MyDList& copy){
+        if (this != &copy) {
+            MyDList tmp(copy);
+            this->swap(tmp);
+        }
         return *this;
     }
     // Вспомогательная функция для copy-and-swap

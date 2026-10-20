@@ -42,13 +42,17 @@ public:
         , capacity_(moved.capacity_)
         , data_(moved.data_)
     {
+        //std::cout << "Move constructor is calling | object " << this << " | from moved " << &moved << std::endl;
         moved.size_ = 0;
         moved.capacity_ = 0;
         moved.data_ = nullptr;
     }
     // Оператор присваивания через копию
-    MyVector& operator=(MyVector copy){
-        this->swap(copy);
+    MyVector& operator=(const MyVector& copy){
+        if (this != &copy) {
+            MyVector tmp(copy);
+            this->swap(tmp);
+        }
         return *this;
     }
     // Вспомогательная функция для copy-and-swap
