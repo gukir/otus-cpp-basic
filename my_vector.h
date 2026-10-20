@@ -142,8 +142,14 @@ public:
     std::size_t size() const override {return size_;}
 
     // Возврат элемента контейнера
-    T& operator[](std::size_t ind) override {return data_[ind];}
-    const T& operator[](std::size_t ind) const override {return data_[ind];}
+    T& operator[](std::size_t ind) override {
+        if (ind >= size_)
+            throw std::out_of_range("MyVector: индекс находится за пределами контейнера.");
+        return data_[ind];}
+    const T& operator[](std::size_t ind) const override {
+        if (ind >= size_)
+            throw std::out_of_range("MyVector: индекс находится за пределами контейнера.");
+        return data_[ind];}
 
     // Итераторы
     class Iterator {
