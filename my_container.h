@@ -38,6 +38,14 @@ public:
     // Геттер размера контейнера
     virtual std::size_t size() const = 0;
 
+    // Удаление последнего элемента
+    void pop_back() {
+        if (this->size() > 0) erase(this->size() - 1);  
+    }
+    // Удаление первого элемента
+    void pop_front() {
+        if (this->size() > 0) erase(0); 
+    }
     // Возврат элемента контейнера
     virtual T& operator[](std::size_t ind) = 0;
     virtual const T& operator[](std::size_t ind) const = 0;
