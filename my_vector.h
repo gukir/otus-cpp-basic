@@ -34,7 +34,7 @@ public:
             data_ = static_cast<T*>(:: operator new(capacity_ * sizeof(T)));
             for(std::size_t i = 0; i < size_; i++)
                 new (data_ + i) T(copy.data_[i]);
-        }
+        } else data_ = copy.data_;
     }
     // Конструктор перемещения
     MyVector(MyVector&& moved)
