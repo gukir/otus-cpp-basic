@@ -126,6 +126,7 @@ public:
     void push_back(const T &value) override {insert(size_, value);}
     void push_back(T &&value) override {insert(size_, std::move(value));}
 
+    using::MyContainer<T>::erase;
     // Удаление элемента по индексу
     void erase(std::size_t ind) override {
         if (ind >= size_)

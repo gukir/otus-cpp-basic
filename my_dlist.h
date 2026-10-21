@@ -172,6 +172,7 @@ public:
     void push_front(const T &value) override {insert(0, value);}
     void push_front(T &&value) override {insert(0, std::move(value));}
 
+    using::MyContainer<T>::erase;
     // Удаление элемента по индексу
     void erase(std::size_t index) override {
         if (index >= size_) throw std::out_of_range("DList::erase");
