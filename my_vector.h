@@ -168,10 +168,10 @@ public:
             return tmp;
         }
         // Операторы сравнения
-        bool operator== (const Iterator& other) {
+        bool operator== (const Iterator& other) const {
             return m_ptr == other.m_ptr;
         }
-        bool operator!= (const Iterator& other) {
+        bool operator!= (const Iterator& other) const {
             return m_ptr != other.m_ptr;
         }
     private:

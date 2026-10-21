@@ -156,6 +156,20 @@ TEST_F(VectorF, MultiplyErase) {
   }
 }
 
+// Тестирование итераторов
+TEST_F(VectorF, Iterators) {
+    auto it = v1.begin();
+    EXPECT_EQ(it, &v1[0]);
+    for (std::size_t i = 0; i < v1.size(); i++){
+        EXPECT_EQ(it, &v1[i]);
+        it++;
+    }
+    EXPECT_EQ(it, v1.end());
+  
+    EXPECT_EQ(v2.begin(), nullptr);
+    EXPECT_EQ(v2.begin(), v2.end());
+}
+
 // Тестирование конструкторов копирования
 TEST_F(VectorF, CopyConstructor) {
   {
