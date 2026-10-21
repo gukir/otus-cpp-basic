@@ -1,7 +1,7 @@
 #include "../my_vector.h"
 
 // Создаем класс фикстуры, наследуемый от ::testing::Test
-class VectorTestFixture : public ::testing::Test {
+class VectorF : public ::testing::Test {
 protected:
     // SetUp вызывается перед каждым тестом (TEST_F)
     void SetUp() override {

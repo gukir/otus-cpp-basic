@@ -1,17 +1,16 @@
 #include <gtest/gtest.h>
-#include "fixture_vector.hpp"
+#include "vector_fixture.hpp"
 
 // Перед запуском тестов с использованием фикстур
 // проверим функциональность конструктора
-TEST(VectorTest, Constructor) {
+TEST(Vector, Constructor) {
     MyVector<int> vec;
     EXPECT_EQ(vec.size(), 0);
 }
 // Также проверим функцию добавления элемента в конец
 // и получение элемента с использованием []
-TEST(VectorTest, PushBackGetElemSize) {
+TEST(Vector, PushBackGetElemSize) {
     MyVector<int> vec;
-    EXPECT_THROW(vec[0], std::out_of_range);
     vec.push_back(10);
     ASSERT_EQ(vec.size(), 1);
     EXPECT_EQ(vec[0], 10);
@@ -22,15 +21,13 @@ TEST(VectorTest, PushBackGetElemSize) {
     EXPECT_EQ(vec[0], 10);
     EXPECT_EQ(vec[1], 20);
     EXPECT_EQ(vec[2], 30);
-    EXPECT_THROW(vec[vec.size()], std::out_of_range);
-    EXPECT_THROW(vec[-1], std::out_of_range);
 }
 
 // В фикстуре инициализируются два контейнера:
 //  v1 - [0, 1, 2, 3, 4] 
 //  v2 - пустой
 // Тестирование фикстуры
-TEST_F(VectorTestFixture, Fixture) {
+TEST_F(VectorF, Fixture) {
     ASSERT_EQ(v1.size(), 5);
     for (std::size_t i = 0; i < v1.size(); i++) {
         EXPECT_EQ(v1[i], i);
@@ -38,8 +35,15 @@ TEST_F(VectorTestFixture, Fixture) {
     ASSERT_EQ(v2.size(), 0);
 }
 
+// Тестирование обращения к элементу вне диапазона
+TEST_F(VectorF, OutOfRange) {
+    EXPECT_THROW(v1[v1.size()], std::out_of_range);
+    EXPECT_THROW(v1[-1], std::out_of_range);
+    EXPECT_THROW(v2[0], std::out_of_range); 
+}
+
 // Тестирование вставки в начало
-TEST_F(VectorTestFixture, PushFront) {
+TEST_F(VectorF, PushFront) {
     v2.push_front(30);
     ASSERT_EQ(v2.size(), 1);
     EXPECT_EQ(v2[0], 30);
@@ -53,11 +57,14 @@ TEST_F(VectorTestFixture, PushFront) {
 }
 
 // Тестирование вставки в середину
-TEST_F(VectorTestFixture, PushMiddle) {
+TEST_F(VectorF, PushMiddle) {
     auto index = v1.size() / 2;
+    std::cout << index << std::endl;
     v1.insert(index, 10);
     ASSERT_EQ(v1.size(), 6);
     EXPECT_EQ(v1[index], 10);
+    EXPECT_EQ(v1[index - 1], 1);
+    EXPECT_EQ(v1[index + 1], 2);
     v1.insert(index, 20);
     ASSERT_EQ(v1.size(), 7);
     EXPECT_EQ(v1[index], 20);
@@ -77,7 +84,7 @@ TEST_F(VectorTestFixture, PushMiddle) {
 }
 
 // Тестирование удаления с конца
-TEST_F(VectorTestFixture, PopBack) {
+TEST_F(VectorF, PopBack) {
     v2.pop_back();
     ASSERT_EQ(v2.size(), 0);
     v1.pop_back();
@@ -91,7 +98,7 @@ TEST_F(VectorTestFixture, PopBack) {
 }
 
 // Тестирование удаления с начала
-TEST_F(VectorTestFixture, PopFront) {
+TEST_F(VectorF, PopFront) {
     v2.pop_front();
     ASSERT_EQ(v2.size(), 0);
     v1.pop_front();
@@ -103,8 +110,54 @@ TEST_F(VectorTestFixture, PopFront) {
     EXPECT_EQ(v1[0], 3);
     EXPECT_EQ(v1[1], 4);
 }
+
+// Тестирование удаления с середины
+TEST_F(VectorF, PopMiddle) {
+    auto index = v1.size() / 2;
+    v1.erase(index);
+    ASSERT_EQ(v1.size(), 4);
+    EXPECT_EQ(v1[index], 3);
+    EXPECT_EQ(v1[index - 1], 1);
+    v1.erase(index);
+    index = v1.size() / 2;
+    v1.erase(index);
+    ASSERT_EQ(v1.size(), 2);
+    EXPECT_EQ(v1[0], 0);
+    EXPECT_EQ(v1[1], 4);
+    EXPECT_THROW(v2.erase(2), std::out_of_range);
+    EXPECT_THROW(v2.erase(-1), std::out_of_range);
+
+    EXPECT_THROW(v2.erase(0), std::out_of_range);
+}
+
+// Тестирование удаления нескольких элементов
+TEST_F(VectorF, MultiplyErase) {
+  {
+      MyVector<int> tmp(v1);
+      std::size_t for_del[] = {1, 3};
+      tmp.erase(for_del, static_cast<std::size_t>(sizeof(for_del) / sizeof(for_del[0])));
+      ASSERT_EQ(tmp.size(), 3);
+      EXPECT_EQ(tmp[0], 0);
+      EXPECT_EQ(tmp[1], 2);
+      EXPECT_EQ(tmp[2], 4);
+  }
+  {
+      MyVector<int> tmp(v1);
+      std::size_t for_del[] = {2, 4, 0};
+      tmp.erase(for_del, static_cast<std::size_t>(sizeof(for_del) / sizeof(for_del[0])));
+      ASSERT_EQ(tmp.size(), 2);
+      EXPECT_EQ(tmp[0], 1);
+      EXPECT_EQ(tmp[1], 3);
+  }
+  {
+      MyVector<int> tmp(v1);
+      std::size_t for_del[] = {2, 4, 6};
+      EXPECT_THROW(tmp.erase(for_del, static_cast<std::size_t>(sizeof(for_del) / sizeof(for_del[0]))), std::out_of_range);
+  }
+}
+
 // Тестирование конструкторов копирования
-TEST_F(VectorTestFixture, CopyConstructor) {
+TEST_F(VectorF, CopyConstructor) {
   {
     MyVector<int> vec(v2);
     ASSERT_EQ(vec.size(), 0);
@@ -133,8 +186,7 @@ TEST_F(VectorTestFixture, CopyConstructor) {
 }
 
 // Тестирование конструкторов перемещения
-// Тестирование имеет смысл при условии корректности конструктора копирования
-TEST_F(VectorTestFixture, MoveConstructor) {
+TEST_F(VectorF, MoveConstructor) {
   {
     MyVector<int> tmp(v2);
     MyVector<int> vec(std::move(tmp));

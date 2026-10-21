@@ -1,7 +1,7 @@
 #include "../my_list.h"
 
 // Создаем класс фикстуры, наследуемый от ::testing::Test
-class ListTestFixture : public ::testing::Test {
+class ListF : public ::testing::Test {
 protected:
     // SetUp вызывается перед каждым тестом (TEST_F)
     void SetUp() override {
