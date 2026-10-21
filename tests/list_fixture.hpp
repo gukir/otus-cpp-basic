@@ -1,4 +1,4 @@
-#include "../my_list.h"
+#include "../my_slist.h"
 
 // Создаем класс фикстуры, наследуемый от ::testing::Test
 class ListF : public ::testing::Test {
@@ -17,5 +17,5 @@ protected:
     }
 
     // Общие данные, доступные во всех тестах, использующих эту фикстуру
-    MyVector<int> l1, l2;
+    MySList<int> l1, l2;
 };

@@ -59,7 +59,6 @@ TEST_F(VectorF, PushFront) {
 // Тестирование вставки в середину
 TEST_F(VectorF, PushMiddle) {
     auto index = v1.size() / 2;
-    std::cout << index << std::endl;
     v1.insert(index, 10);
     ASSERT_EQ(v1.size(), 6);
     EXPECT_EQ(v1[index], 10);
@@ -159,9 +158,9 @@ TEST_F(VectorF, MultiplyErase) {
 // Тестирование итераторов
 TEST_F(VectorF, Iterators) {
     auto it = v1.begin();
-    EXPECT_EQ(it, &v1[0]);
+    EXPECT_EQ(*it, v1[0]);
     for (std::size_t i = 0; i < v1.size(); i++){
-        EXPECT_EQ(it, &v1[i]);
+        EXPECT_EQ(*it, v1[i]);
         it++;
     }
     EXPECT_EQ(it, v1.end());

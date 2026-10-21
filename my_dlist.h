@@ -82,8 +82,7 @@ public:
 
     // Вспомогательная функция для поиска элемента по индексу за O(N/2)
     Node* getNode(std::size_t index) const {
-        if (index >= size_) return nullptr;
-
+        if (index >= size_) throw std::out_of_range("DList::getNode");
         Node* curr_node;
         // К какому концу индекс ближе, с того и начинаем движение
         if (index < size_ / 2) {
@@ -206,10 +205,12 @@ public:
 
     // Возврат элемента контейнера
     T& operator[](std::size_t index) override {
+        if (index >= size_) throw std::out_of_range("DList::get");
         Node* node = getNode(index);
         return node->value;
     }
     const T& operator[](std::size_t index) const override {
+        if (index >= size_) throw std::out_of_range("DList::get");
         Node* node = getNode(index);
         return node->value;
     }
@@ -230,10 +231,10 @@ public:
             return tmp;
         }
         // Операторы сравнения
-        bool operator== (const Iterator& other) {
+        bool operator== (const Iterator& other) const {
             return m_ptr == other.m_ptr;
         }
-        bool operator!= (const Iterator& other) {
+        bool operator!= (const Iterator& other) const {
             return m_ptr != other.m_ptr;
         }
     private:

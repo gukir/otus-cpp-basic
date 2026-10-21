@@ -40,9 +40,9 @@ public:
     }
     // Конструктор перемещения
     MySList(MySList&& moved)
-        : size_(moved.size_)
-        , head_(moved.head_)
+        : head_(moved.head_)
         , tail_(moved.tail_)
+        , size_(moved.size_)
     {
         moved.size_ = 0;
         moved.head_ = nullptr;
@@ -166,11 +166,13 @@ public:
 
     // Возврат элемента контейнера
     T& operator[](std::size_t index) override {
+        if (index >= size_) throw std::out_of_range("SList::get");
         Node* cur = head_;
         for (std::size_t i = 0; i < index; ++i) cur = cur->next;
         return cur->value;
     }
     const T& operator[](std::size_t index) const override {
+        if (index >= size_) throw std::out_of_range("SList::get");
         Node* cur = head_;
         for (std::size_t i = 0; i < index; ++i) cur = cur->next;
         return cur->value;
@@ -192,10 +194,10 @@ public:
             return tmp;
         }
         // Операторы сравнения
-        bool operator== (const Iterator& other) {
+        bool operator== (const Iterator& other) const {
             return m_ptr == other.m_ptr;
         }
-        bool operator!= (const Iterator& other) {
+        bool operator!= (const Iterator& other) const {
             return m_ptr != other.m_ptr;
         }
     private:
