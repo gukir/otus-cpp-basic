@@ -35,14 +35,14 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 # 4. Создаем исполняемый файл для ваших тестов
-add_executable(unit_tests
-  tests/test_vector.cpp
-  tests/fixture_vector.hpp
-  tests/test_list.cpp
-  tests/fixture_list.hpp
+add_executable(containers_tests
+  tests/vector_tests.cpp
+  tests/vector_fixture.hpp
+  tests/list_tests.cpp
+  tests/list_fixture.hpp
 )
 
 # 5. Подключаем библиотеки GTest и GTest main
-target_link_libraries(unit_tests
+target_link_libraries(containers_tests
   GTest::gtest_main
 )
