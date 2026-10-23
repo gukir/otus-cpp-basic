@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "vector_fixture.hpp"
+#include "tracker.hpp"
 
 // Перед запуском тестов с использованием фикстур
 // проверим функциональность конструктора
@@ -196,6 +197,21 @@ TEST_F(VectorF, CopyConstructor) {
         EXPECT_EQ(v1[i], vec[i]);
     }
   }
+}
+
+// Тестирование деструктора
+TEST(Vector, Destructor){
+    // Сброс счетчика
+    Tracker::alive_count = 0;
+    {
+        MyVector<Tracker> vec;
+        int num = 5;
+        for(int i = 0; i < num; i++){
+            vec.push_back(i);
+        }
+        EXPECT_EQ(Tracker::alive_count, num);
+    }
+    EXPECT_EQ(Tracker::alive_count, 0); 
 }
 
 // Тестирование конструкторов перемещения

@@ -40,6 +40,7 @@ add_executable(containers_tests
   tests/vector_fixture.hpp
   tests/list_tests.cpp
   tests/list_fixture.hpp
+  tests/tracker.hpp
 )
 
 # 5. Подключаем библиотеки GTest и GTest main

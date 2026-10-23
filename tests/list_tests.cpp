@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "list_fixture.hpp"
+#include "tracker.hpp"
 
 // Перед запуском тестов с использованием фикстур
 // проверим функциональность конструктора
@@ -196,6 +197,21 @@ TEST_F(ListF, CopyConstructor) {
         EXPECT_EQ(l1[i], sl[i]);
     }
   }
+}
+
+// Тестирование деструктора
+TEST(List, Destructor){
+    // Сброс счетчика
+    Tracker::alive_count = 0;
+    {
+        MySList<Tracker> sl;
+        int num = 5;
+        for(int i = 0; i < num; i++){
+            sl.push_back(i);
+        }
+        EXPECT_EQ(Tracker::alive_count, num);
+    }
+    EXPECT_EQ(Tracker::alive_count, 0); 
 }
 
 // Тестирование конструкторов перемещения
